@@ -912,6 +912,7 @@ class AudioMAEConditionCTPoolRand(nn.Module):
                         np.random.choice(list(range(len(self.time_pooling_factors))))
                     ],
                 )
+                
                 # freq_pool = self.freq_pooling_factors[np.random.choice(list(range(len(self.freq_pooling_factors))))]
                 freq_pool = min(8, time_pool)  # TODO here I make some modification.
         else:
@@ -939,6 +940,7 @@ class AudioMAEConditionCTPoolRand(nn.Module):
 
     # Required
     def forward(self, batch, time_pool=None, freq_pool=None):
+        print(f"batch.size(): {batch.size()}")
         assert batch.size(-2) == 1024 and batch.size(-1) == 128
 
         if self.device is None:

@@ -113,6 +113,13 @@ class AudioDataset(Dataset):
         if data["text"] is None:
             print("Warning: The model return None on key text", fname)
             data["text"] = ""
+        print(f"getting item {index}, text: {data['text']}, fname: {data['fname']}")
+        
+        # FINAL CHECK: Ensure all tensors are float32 before returning
+        for key, value in data.items():
+            if isinstance(value, torch.Tensor) and value.dtype != torch.float32:
+                data[key] = value.float()
+                print(f"Converted {key} to float32")
 
         return data
 

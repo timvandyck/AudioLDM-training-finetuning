@@ -7,7 +7,7 @@ precision: high #setzt pytorch matmul precision
 
 # ACHTUNG -> dieser wird nur geladen, falls keine weiteren checkpoints im logs/chekpoints ordner vorhanden sind! 
 # Er lädt nur die Gewichte des Checkpoints, welche in der Konfiguration des Modells übereinstimmen! Alle anderen werden nicht geladen! 
-reload_from_ckpt: ./data/checkpoints/audioldm2-full.pth #Checkpoint welcher geladen werden soll für das fine-tuning
+#reload_from_ckpt: ./data/checkpoints/audioldm2-full.pth #Checkpoint welcher geladen werden soll für das fine-tuning
 
 variables:
   sampling_rate: &sampling_rate 16000 
@@ -27,7 +27,9 @@ data:
   val: audiocaps
   test: audiocaps
   class_label_indices: audioset_eval_subset
-  dataloader_add_ons: [waveform_rs_48k] #TODO: herausfinden was das kontrolliert
+  dataloader_add_ons: [extract_kaldi_fbank_feature,
+                extract_vits_phoneme_and_flant5_text,
+                waveform_rs_48k] #TODO: herausfinden was das kontrolliert
 # --- Trainingsschritte & Speicher-Konfiguration ---
 # =================================================================
 # CHECKPOINT MANAGEMENT & NAMING SYSTEM
@@ -78,7 +80,7 @@ data:
 step:
   validation_every_n_epochs: 5 # alle 5 Epochen wird validiert
   save_checkpoint_every_n_steps: 5000 # alle 5000 Schritte wird ein Checkpoint gespeichert
-  # limit_val_batches: 10 #TODO: herausfinden was das kontrolliert
+  limit_val_batches: 10 #TODO: herausfinden was das kontrolliert
   max_steps: 1500000 # maximale Anzahl an Trainingsschritten
   save_top_k: 3 # Anzahl der besten Checkpoints, die gespeichert werden sollen
   #checkpoints werden gespeichert unter: 
@@ -151,7 +153,7 @@ model:
     warmup_steps: *warmup_steps
     optimize_ddpm_parameter: *optimize_ddpm_parameter
     sampling_rate: *sampling_rate
-    batchsize: 2
+    batchsize: 16
     linear_start: 0.0015
     linear_end: 0.0195
     num_timesteps_cond: 1
@@ -169,7 +171,7 @@ model:
       target: audioldm_train.modules.diffusionmodules.openaimodel.UNetModel
       params:
         image_size: 64 # Ignore this parameter
-        extra_film_condition_dim: 512 # If you use film as extra condition, set this parameter. For example if you have two conditioning vectors each have dimension 512, then this number would be 1024
+        #extra_film_condition_dim: 512 # If you use film as extra condition, set this parameter. For example if you have two conditioning vectors each have dimension 512, then this number would be 1024
         context_dim: 
         - 768
         - 1024
@@ -189,7 +191,7 @@ model:
         num_head_channels: 32
         use_spatial_transformer: true
         transformer_depth: 1
-        extra_sa_layer: False
+        #extra_sa_layer: False
     #Hier wird die Konditionierungs-Stage definiert
     cond_stage_config:
       crossattn_audiomae_generated:
@@ -207,7 +209,7 @@ model:
           use_warmup: true
           sequence_input_key: [film_clap_cond1,crossattn_flan_t5]
           sequence_input_embed_dim: [512,1024]
-          batchsize: 2
+          batchsize: 16
           cond_stage_config:
             film_clap_cond1:
               cond_stage_key: text

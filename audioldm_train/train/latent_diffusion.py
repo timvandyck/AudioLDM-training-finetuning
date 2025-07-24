@@ -63,7 +63,8 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
 
     # Determine the device
     if torch.backends.mps.is_available():
-        device = "mps"
+        #device = "mps"
+        device = "cpu"
         print("Using Apple Silicon (MPS) for acceleration.")
     else:
         # Fallback to CPU if MPS is not available (e.g., older macOS, no M-chip)
@@ -193,6 +194,7 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
         num_sanity_val_steps=1,
         limit_val_batches=limit_val_batches,
         check_val_every_n_epoch=validation_every_n_epochs,
+        precision="32-true", # Use "32-true" for MPS/CPU
         # Remove DDPStrategy since we're targeting single Mac ARM.
         # strategy=DDPStrategy(find_unused_parameters=True), 
         callbacks=[checkpoint_callback],
