@@ -1964,6 +1964,7 @@ class DiffusionWrapper(pl.LightningModule):
         self.conditioning_key = conditioning_key
 
         for key in self.conditioning_key:
+            print(f"conditioning key: {key}")
             if (
                 "concat" in key
                 or "crossattn" in key
@@ -1973,6 +1974,7 @@ class DiffusionWrapper(pl.LightningModule):
             ):
                 continue
             else:
+                print(f"The conditioning key {key} is illegal")
                 raise Value("The conditioning key %s is illegal" % key)
 
         self.being_verbosed_once = False

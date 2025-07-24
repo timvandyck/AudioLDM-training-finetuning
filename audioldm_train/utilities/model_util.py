@@ -104,6 +104,7 @@ def instantiate_from_config(config):
 
 def get_obj_from_str(string, reload=False):
     module, cls = string.rsplit(".", 1)
+    print(f"\n\n\ncurrently instantiating {string}\n\n\n")
     if reload:
         module_imp = importlib.import_module(module)
         importlib.reload(module_imp)
@@ -279,12 +280,21 @@ def get_vocoder(config, device, mel_bins):
         config = hifigan.AttrDict(config)
         vocoder = hifigan.Generator_HiFiRes(config)
 
-    ckpt = torch.load(model_path + ".ckpt")
+    # THIS IS THE LINE TO CHANGE
+    #ckpt = torch.load(model_path + ".ckpt") # Original line
+    # Change it to:
+    print(f"!!!device is {device}!!!")
+    ckpt = torch.load(model_path + ".ckpt", map_location=device) # Pass 'device' here
+    # Or more explicitly for CPU/MPS:
+    # ckpt = torch.load(model_path + ".ckpt", map_location=torch.device('cpu')) 
+    # If `device` correctly resolves to "mps", then `map_location=device` is better.
+
+
     ckpt = torch_version_orig_mod_remove(ckpt)
     vocoder.load_state_dict(ckpt["generator"])
     vocoder.eval()
     vocoder.remove_weight_norm()
-    vocoder.to(device)
+    vocoder.to(device) # This moves the model to the target device after loading.
     return vocoder
 
 
