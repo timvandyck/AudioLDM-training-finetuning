@@ -8,14 +8,18 @@ sys.path.append("src")
 import shutil
 import os
 
-os.environ["TOKENIZERS_PARALLELISM"] = "true"
+# Set TOKENIZERS_PARALLELISM to false to avoid potential deadlocks with multiprocessing
+# on macOS, especially when using MPS.
+os.environ["TOKENIZERS_PARALLELISM"] = "false" 
 
 import argparse
 import yaml
 import torch
 
 from tqdm import tqdm
-from pytorch_lightning.strategies.ddp import DDPStrategy
+# DDPStrategy is for distributed training (multiple GPUs), which is not typical for a single Mac ARM machine.
+# We'll remove it or make it conditional.
+# from pytorch_lightning.strategies.ddp import DDPStrategy 
 from audioldm_train.utilities.data.dataset import AudioDataset
 
 from torch.utils.data import DataLoader
@@ -33,7 +37,13 @@ logging.basicConfig(level=logging.WARNING)
 
 
 def print_on_rank0(msg):
-    if torch.distributed.get_rank() == 0:
+    # This function is primarily for distributed training.
+    # On a single Mac ARM machine, rank will always be 0.
+    # We can simplify it or keep it as is, it won't hurt.
+    if torch.distributed.is_initialized():
+        if torch.distributed.get_rank() == 0:
+            print(msg)
+    else:
         print(msg)
 
 
@@ -44,10 +54,24 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
         print("SEED EVERYTHING TO 0")
         seed_everything(0)
 
-    if "precision" in configs.keys():
-        torch.set_float32_matmul_precision(
-            configs["precision"]
-        )  # highest, high, medium
+    # MPS does not currently support `torch.set_float32_matmul_precision`.
+    # This line should be skipped or conditionally executed.
+    # if "precision" in configs.keys():
+    #     torch.set_float32_matmul_precision(
+    #         configs["precision"]
+    #     )  # highest, high, medium
+
+    # Determine the device
+    if torch.backends.mps.is_available():
+        device = "mps"
+        print("Using Apple Silicon (MPS) for acceleration.")
+    else:
+        # Fallback to CPU if MPS is not available (e.g., older macOS, no M-chip)
+        device = "cpu"
+        print("MPS not available, falling back to CPU.")
+    
+    # In PyTorch Lightning, the 'accelerator' argument handles device placement.
+    # We'll set 'accelerator="mps"' or "cpu" directly in the Trainer.
 
     log_path = configs["log_directory"]
     batch_size = configs["model"]["params"]["batchsize"]
@@ -59,11 +83,13 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
 
     dataset = AudioDataset(configs, split="train", add_ons=dataloader_add_ons)
 
+    # For MPS, num_workers is often best set to 0 or 1.
+    # Higher values can sometimes lead to overhead or issues.
     loader = DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=16,
-        pin_memory=True,
+        num_workers=0, # Changed from 16 to 0 for MPS/CPU efficiency on Mac
+        pin_memory=True if device == "mps" else False, # Pin memory can be beneficial for MPS
         shuffle=True,
     )
 
@@ -77,6 +103,8 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
     val_loader = DataLoader(
         val_dataset,
         batch_size=8,
+        num_workers=0, # Changed from default to 0 for MPS/CPU
+        pin_memory=True if device == "mps" else False,
     )
 
     # Copy test data
@@ -109,8 +137,8 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
 
     checkpoint_callback = ModelCheckpoint(
         dirpath=checkpoint_path,
-        monitor="global_step",
-        mode="max",
+        monitor="global_step", # Monitor a metric that exists during training, e.g., 'global_step'
+        mode="max", # Or 'min' depending on what 'global_step' indicates. For global step, 'max' is fine.
         filename="checkpoint-fad-{val/frechet_inception_distance:.2f}-global_step={global_step:.0f}",
         every_n_train_steps=save_checkpoint_every_n_steps,
         save_top_k=save_top_k,
@@ -135,7 +163,9 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
         print("Train from scratch")
         resume_from_checkpoint = None
 
-    devices = torch.cuda.device_count()
+    # devices = torch.cuda.device_count() # This will be 0 on Mac ARM without CUDA
+    # For MPS, we typically use 1 device. PyTorch Lightning handles this with `accelerator="mps"`.
+    devices = 1 # We'll let Trainer figure out the actual device count for MPS
 
     latent_diffusion = instantiate_from_config(configs["model"])
     latent_diffusion.set_log_dir(log_path, exp_group_name, exp_name)
@@ -152,21 +182,25 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
     print("==> Save checkpoint every %s steps" % save_checkpoint_every_n_steps)
     print("==> Perform validation every %s epochs" % validation_every_n_epochs)
 
+    # Instantiate Trainer
+    # Change accelerator to "mps" if available, else "cpu"
+    # Remove DDPStrategy for single-device training.
     trainer = Trainer(
-        accelerator="gpu",
-        devices=devices,
+        accelerator=device, # Changed from "gpu" to dynamic 'device' ('mps' or 'cpu')
+        devices=1, # Always 1 for single-device MPS or CPU training
         logger=wandb_logger,
         max_steps=max_steps,
         num_sanity_val_steps=1,
         limit_val_batches=limit_val_batches,
         check_val_every_n_epoch=validation_every_n_epochs,
-        strategy=DDPStrategy(find_unused_parameters=True),
+        # Remove DDPStrategy since we're targeting single Mac ARM.
+        # strategy=DDPStrategy(find_unused_parameters=True), 
         callbacks=[checkpoint_callback],
     )
 
     if is_external_checkpoints:
         if resume_from_checkpoint is not None:
-            ckpt = torch.load(resume_from_checkpoint)["state_dict"]
+            ckpt = torch.load(resume_from_checkpoint, map_location=device)["state_dict"] # Map to device
 
             key_not_in_model_state_dict = []
             size_mismatch_keys = []
@@ -186,16 +220,7 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
                     del ckpt[key]
                     size_mismatch_keys.append(key)
 
-            # if(len(key_not_in_model_state_dict) != 0 or len(size_mismatch_keys) != 0):
-            # print("⛳", end=" ")
-
-            # print("==> Warning: The following key in the checkpoint is not presented in the model:", key_not_in_model_state_dict)
-            # print("==> Warning: These keys have different size between checkpoint and current model: ", size_mismatch_keys)
-
             latent_diffusion.load_state_dict(ckpt, strict=False)
-
-        # if(perform_validation):
-        #     trainer.validate(latent_diffusion, val_loader)
 
         trainer.fit(latent_diffusion, loader, val_loader)
     else:
@@ -228,7 +253,14 @@ if __name__ == "__main__":
 
     perform_validation = args.val
 
-    assert torch.cuda.is_available(), "CUDA is not available"
+    # Check for MPS availability first, then CUDA (though CUDA won't be on Mac ARM)
+    if not torch.backends.mps.is_available() and not torch.cuda.is_available():
+        print("Neither MPS nor CUDA is available. Running on CPU.")
+    elif torch.backends.mps.is_available():
+        print("MPS (Metal Performance Shaders) is available. Using Apple Silicon GPU.")
+    elif torch.cuda.is_available():
+        print("CUDA is available. Using NVIDIA GPU.")
+
 
     config_yaml = args.config_yaml
 
@@ -242,9 +274,14 @@ if __name__ == "__main__":
         config_yaml["reload_from_ckpt"] = args.reload_from_ckpt
 
     if perform_validation:
-        config_yaml["model"]["params"]["cond_stage_config"][
-            "crossattn_audiomae_generated"
-        ]["params"]["use_gt_mae_output"] = False
+        # These specific config changes related to `cond_stage_config` might need to be verified
+        # against the actual structure of your `audioldm_train` library and the model's design.
+        # Assuming they are general settings that don't directly conflict with device change.
+        if "model" in config_yaml and "params" in config_yaml["model"] and \
+           "cond_stage_config" in config_yaml["model"]["params"] and \
+           "crossattn_audiomae_generated" in config_yaml["model"]["params"]["cond_stage_config"] and \
+           "params" in config_yaml["model"]["params"]["cond_stage_config"]["crossattn_audiomae_generated"]:
+            config_yaml["model"]["params"]["cond_stage_config"]["crossattn_audiomae_generated"]["params"]["use_gt_mae_output"] = False
         config_yaml["step"]["limit_val_batches"] = None
 
     main(config_yaml, config_yaml_path, exp_group_name, exp_name, perform_validation)
