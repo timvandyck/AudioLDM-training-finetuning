@@ -7,7 +7,7 @@ precision: high #setzt pytorch matmul precision
 
 # ACHTUNG -> dieser wird nur geladen, falls keine weiteren checkpoints im logs/chekpoints ordner vorhanden sind! 
 # Er lädt nur die Gewichte des Checkpoints, welche in der Konfiguration des Modells übereinstimmen! Alle anderen werden nicht geladen! 
-#reload_from_ckpt: ./data/checkpoints/audioldm2-full.pth #Checkpoint welcher geladen werden soll für das fine-tuning
+reload_from_ckpt: ./data/checkpoints/audioldm2-full.pth #Checkpoint welcher geladen werden soll für das fine-tuning
 
 variables:
   sampling_rate: &sampling_rate 16000 
@@ -23,10 +23,10 @@ variables:
 
 # --- Datensatzkonfiguration ---
 data: 
-  train: [audiocaps]
-  val: audiocaps
-  test: audiocaps
-  class_label_indices: audioset_eval_subset
+  train: ["audiocaps"]
+  val: "audiocaps"
+  test: "audiocaps"
+  class_label_indices: "audioset_eval_subset"
   dataloader_add_ons: [extract_kaldi_fbank_feature,
                 extract_vits_phoneme_and_flant5_text,
                 waveform_rs_48k] #TODO: herausfinden was das kontrolliert
@@ -118,7 +118,7 @@ model:
       params: 
         reload_from_ckpt: "data/checkpoints/vae_mel_16k_64bins.ckpt"
         sampling_rate: *sampling_rate
-        batchsize: 4 #globale batch size des models
+        batchsize: 2 #globale batch size des models
         monitor: val/rec_loss
         image_key: fbank
         subband: 1
@@ -153,7 +153,7 @@ model:
     warmup_steps: *warmup_steps
     optimize_ddpm_parameter: *optimize_ddpm_parameter
     sampling_rate: *sampling_rate
-    batchsize: 16
+    batchsize: 4
     linear_start: 0.0015
     linear_end: 0.0195
     num_timesteps_cond: 1
@@ -209,7 +209,7 @@ model:
           use_warmup: true
           sequence_input_key: [film_clap_cond1,crossattn_flan_t5]
           sequence_input_embed_dim: [512,1024]
-          batchsize: 16
+          batchsize: 4
           cond_stage_config:
             film_clap_cond1:
               cond_stage_key: text
@@ -246,5 +246,5 @@ model:
 
     evaluation_params:
       unconditional_guidance_scale: 3.5
-      ddim_sampling_steps: 200
+      ddim_sampling_steps: 10 # Diffusionsdurchläufe, eigentlich 200, aber for test auf 20 
       n_candidates_per_samples: 3
