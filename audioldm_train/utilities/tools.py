@@ -103,8 +103,11 @@ def listdir_nohidden(path):
         if not f.startswith("."):
             yield f
 
+"""Das macht: 
 
+"""
 def get_restore_step(path):
+    
     checkpoints = os.listdir(path)
     if os.path.exists(os.path.join(path, "final.ckpt")):
         return "final.ckpt", 0
