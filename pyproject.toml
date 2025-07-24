@@ -15,7 +15,10 @@ webdataset = "^0.2.75"
 hear21passt = {git = "https://github.com/haoheliu/passt_hear21.git"}
 audioldm-eval = {git = "https://github.com/haoheliu/audioldm_eval.git"}
 wandb = "^0.16.0"
-pytorch-lightning = "^2.1.1"
+pytorch-lightning = "2.1.0"
+torch = "2.1.0"
+torchvision = "0.16.0"
+torchaudio = "2.1.0"
 einops = "^0.7.0"
 h5py = "^3.10.0"
 transformers = "4.30.2"
