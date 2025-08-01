@@ -1,0 +1,849 @@
+{
+    "data": [
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0243(1)_328_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA036.WAV_0154-2_209_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA081.WAV_0412_502_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0207_274_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA041.WAV_0223_295_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA037.WAV_0164_221_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0124a_165_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0138_189_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA020.WAV_0063_82_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0147_201_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0091_115_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0275_385_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0119(2)_153_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA081.WAV_0414_504_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0274_384_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA068.WAV_0371_454_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0116(3)_145_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA017.WAV_0043(1)_49_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0263(3)_358_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0026(1)_30_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0196_254_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0173_229_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA077.WAV_0385(2)_473_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0026(2)_31_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0266_367_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0133(1)_180_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0015_19_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0219_291_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0078_101_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0263(5)_360_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0137_188_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0343_408_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0121(2)_159_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0020_24_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA037.WAV_0165_222_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0131(1)_173_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0116(4)_146_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0359_433_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0124_164_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0206(2)_273_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0208(2)_277_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0084_108_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA037.WAV_0163(2)_220_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0335(2)_397_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0356(3)_430_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0246_334_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA041.WAV_0228_302_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0123_163_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0177_233_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0344_409_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0244(1)_331_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA068.WAV_0370_453_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0204_266_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0341(1)_404_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0142(3)_196_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0125_166_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA037.WAV_0167_224_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0048(1)_60_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA037.WAV_0166_223_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0148_202_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0356(2)_429_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0132(1)_176_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0273(2)_383_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0014(3)_16_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA017.WAV_0043(2)_50_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0176_232_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0141_192_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0119_151_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0178_234_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0054_69_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA017.WAV_0043(3)_51_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0213_286_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA057.WAV_0351(1)_417_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0244(2)_332_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA036.WAV_0155_210_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0052_67_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0114_140_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA041.WAV_0227_301_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0357_431_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0132(3)_178_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0333_393_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0142(2)_195_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA088.WAV_0457_547_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0136_187_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA031.WAV_0096(2)_122_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0268(1)_370_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0133(2)_181_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0081(1)_105_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0048(2.2)_63_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0267_368_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA070.WAV_0374_457_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0017_21_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0263(4)_359_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0203_265_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA081.WAV_0415_505_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0028_33_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0334_394_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0087_111_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0132(2)_177_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0243(2)_329_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0023_26_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA031.WAV_0096(1)_121_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0339_401_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0140_191_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0092_116_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0205(1)_268_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA063.WAV_0364(1)_445_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0172_228_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0272_380_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0186_242_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0237(2)_317_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA043.WAV_0262(1)_353_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0018_22_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0089_113_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0356(1)_428_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0263(6)_361_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0080_103_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA012.WAV_0030_35_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0331_391_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0174_230_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0271(2)_378_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0330_390_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA038.WAV_0180_236_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0215_287_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0211(1)_281_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0210_279_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0122(1)_161_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0201_263_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA016.WAV_0039_44_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0205(3)_269_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0085_109_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA041.WAV_0229_303_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0265(3)_366_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0265(1)_364_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0247_335_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0354(2)_425_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA043.WAV_0257_347_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0083_107_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA072.WAV_0376_460_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0051_66_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0212_285_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA012.WAV_0031_36_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0271(1)_377_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA054.WAV_0338_400_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA042.WAV_0238_318_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0216_288_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA041.WAV_0235_313_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0211(2)_282_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0133(5)_184_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0134_185_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0206(1)_272_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0081(2)_106_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0271(3)_379_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0145_199_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA029.WAV_0088_112_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA020.WAV_0064(1)_84_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA052.WAV_0327_387_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0050_65_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA010.WAV_0010_9_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA044.WAV_0270(2)_375_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA062.WAV_0360(6)_440_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0119(1)_152_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0133(3)_182_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA041.WAV_0232(1)_307_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA037.WAV_0163(1)_219_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA019.WAV_0045(1)_55_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA033.WAV_0129_170_padded.wav",
+            "caption": "adult",
+            "labels": "adult"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0218_290_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        },
+        {
+            "wav": "elephant_data/audio_set/ADDOA040.WAV_0220_292_padded.wav",
+            "caption": "kid",
+            "labels": "kid"
+        }
+    ]
+}

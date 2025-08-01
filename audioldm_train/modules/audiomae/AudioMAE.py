@@ -111,7 +111,7 @@ class Vanilla_AudioMAE(nn.Module):
         )
 
         checkpoint_path = "data/checkpoints/audiomae_16k_128bins.ckpt"
-        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+        checkpoint = torch.load(checkpoint_path, map_location="cpu",weights_only=False)
         msg = model.load_state_dict(checkpoint["model"], strict=False)
 
         # Skip the missing keys of decoder modules (not required)

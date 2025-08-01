@@ -1,0 +1,258 @@
+metadata_root: ./data/elephant_data/metadata/dataset_root.json
+log_directory: ./log/latent_diffusion #ordner wo logs gespeichert werden
+project: audioldm2_elecom_cnn14_ # Name des Projekts -> genutzt von wandb logger
+precision: high #setzt pytorch matmul precision
+#seed: 42 #called pytorch seed_everynthing -> Alle random zahlen nutzen nun den gegebenen seed! Falls nicht gesetzt: seed = 0 
+
+
+# ACHTUNG -> dieser wird nur geladen, falls keine weiteren checkpoints im logs/chekpoints ordner vorhanden sind! 
+# Er lädt nur die Gewichte des Checkpoints, welche in der Konfiguration des Modells übereinstimmen! Alle anderen werden nicht geladen! 
+reload_from_ckpt: ./data/checkpoints/audioldm2-full.pth #Checkpoint welcher geladen werden soll für das fine-tuning
+
+variables:
+  sampling_rate: &sampling_rate 16000 
+  mel_bins: &mel_bins 64
+  latent_embed_dim: &latent_embed_dim 8
+  latent_t_size: &latent_t_size 256 # TODO might need to change
+  latent_f_size: &latent_f_size 16
+  in_channels: &unet_in_channels 8
+  optimize_ddpm_parameter: &optimize_ddpm_parameter true
+  optimize_gpt: &optimize_gpt true
+  warmup_steps: &warmup_steps 2000
+
+
+# --- Datensatzkonfiguration ---
+data: 
+  train: ["elephant_dataset"]
+  val: "elephant_dataset"
+  test: "elephant_dataset"
+  class_label_indices: "audioset_eval_subset"
+  dataloader_add_ons: [extract_kaldi_fbank_feature,
+                extract_vits_phoneme_and_flant5_text,
+                waveform_rs_48k] #TODO: herausfinden was das kontrolliert
+# --- Trainingsschritte & Speicher-Konfiguration ---
+# =================================================================
+# CHECKPOINT MANAGEMENT & NAMING SYSTEM
+# =================================================================
+# 
+# Das ModelCheckpoint System funktioniert folgendermaßen:
+#
+# 1. SPEICHER-HÄUFIGKEIT:
+#    - Alle 'save_checkpoint_every_n_steps' wird ein Checkpoint gespeichert
+#    - Z.B. save_checkpoint_every_n_steps: 500 → alle 500 Training Steps
+#
+# 2. CHECKPOINT NAMING TEMPLATE:
+#    checkpoint-fad-{val/frechet_inception_distance:.2f}-global_step={global_step:.0f}
+#    
+#    Beispiel-Dateinamen:
+#    ├── checkpoint-fad-18.45-global_step=500.ckpt    # Erster Save (schlechtere FAD)
+#    ├── checkpoint-fad-15.32-global_step=1000.ckpt   # Besser werdend
+#    ├── checkpoint-fad-12.78-global_step=1500.ckpt   # Noch besser
+#    └── checkpoint-fad-9.23-global_step=2000.ckpt    # Bester bis jetzt
+#
+# 3. METRIK ERKLÄRUNG:
+#    - FAD (Fréchet Audio Distance): Misst Audio-Qualität
+#      → Niedrigere Werte = bessere Audio-Generierung
+#      → Typische Werte: 5-50 (je nach Dataset)
+#    - global_step: Anzahl der absoluten Training Steps
+#
+# 4. CHECKPOINT RETENTION:
+#    - 'save_top_k' bestimmt wieviele Checkpoints behalten werden
+#    - monitor=global_step + mode=max → behalte die neuesten
+#    - Ältere Checkpoints werden automatisch gelöscht
+#
+# 5. VERZEICHNIS-STRUKTUR:
+#    log_directory/
+#    ├── {exp_group_name}/              # Ordner der Config (z.B. 2025_elephant_training)
+#    │   └── {exp_name}/                # Name der YAML (z.B. audioldm2_age_class) 
+#    │       ├── checkpoints/           # ← Hier landen die .ckpt Dateien
+#    │       ├── wandb_logs/            # W&B Logging
+#    │       └── config_backup.yaml    # Kopie der verwendeten Config
+#
+# 6. AUTOMATISCHE WIEDERAUFNAHME:
+#    - Lädt den checkpoint:
+#     falls ein final.ckpt vorhanden ist, wird dieser geladen
+#     falls nicht, lade den checkpoint des zuletzt gespeicherten steps
+#     falls auch dieser nicht vorhanden ist, lade last.ckpt
+
+# =================================================================
+
+step:
+  validation_every_n_epochs: 2 # alle 5 Epochen wird validiert
+  #save_checkpoint_every_n_steps: 250 # alle 5000 Schritte wird ein Checkpoint gespeichert
+  save_checkpoint_every_n_epochs: 2                # Alle 5 Epochen speichern
+  limit_val_batches: 10 #TODO: herausfinden was das kontrolliert
+  max_steps: 1500000 # maximale Anzahl an Trainingsschritten
+  save_top_k: 3 # Anzahl der besten Checkpoints, die gespeichert werden sollen
+  #checkpoints werden gespeichert unter: 
+    #log_directory/config.yaml_parent_ordner_name/config.yaml_name/checkpoints
+  
+
+preprocessing:
+  audio:
+    sampling_rate: *sampling_rate
+    max_wav_value: 32768.0
+    duration: 10.24
+  stft:
+    filter_length: 1024
+    hop_length: 160
+    win_length: 1024
+  mel:
+    n_mel_channels: *mel_bins
+    mel_fmin: 0
+    mel_fmax: 8000 
+
+augmentation:
+  mixup: 0.0
+
+model:
+  #definiert das Basis-Modell, dieses kann dynamisch durch die folgenden Parameter zusamengestellt werden
+  target: audioldm_train.modules.latent_diffusion.ddpm.LatentDiffusion
+  params: 
+    # Autoencoder 
+    # Diese Stage ist immer einfach der autoencoder
+    first_stage_config:
+      base_learning_rate: 8.0e-06
+      #hier ist die Klasse definiert, die den VAE (Variational Autoencoder) implementiert
+      # die parameter werden an den Konstruktur des VAE weitergegeben
+      target: audioldm_train.modules.latent_encoder.autoencoder.AutoencoderKL
+      params: 
+        reload_from_ckpt: "data/checkpoints/vae_mel_16k_64bins.ckpt"
+        sampling_rate: *sampling_rate
+        batchsize: 4 #globale batch size des models
+        monitor: val/rec_loss
+        image_key: fbank
+        subband: 1
+        embed_dim: *latent_embed_dim
+        time_shuffle: 1
+        lossconfig:
+          target: audioldm_train.losses.LPIPSWithDiscriminator
+          params:
+            disc_start: 50001
+            kl_weight: 1000.0
+            disc_weight: 0.5
+            disc_in_channels: 1
+        ddconfig: 
+          double_z: true
+          mel_bins: *mel_bins # The frequency bins of mel spectrogram
+          z_channels: 8
+          resolution: 256
+          downsample_time: false
+          in_channels: 1
+          out_ch: 1
+          ch: 128 
+          ch_mult:
+          - 1
+          - 2
+          - 4
+          num_res_blocks: 2
+          attn_resolutions: []
+          dropout: 0.0
+    #TEST setup evaluator!
+    # Evaluator hinzufügen:
+    evaluator:
+      target: audioldm_eval.EvaluationHelper
+      params:
+        sampling_rate: 16000
+        device: "cuda"  # oder "cuda" falls verfügbar
+        backbone: "cnn14"
+    # Other parameters
+    base_learning_rate: 1.0e-4
+    warmup_steps: *warmup_steps
+    optimize_ddpm_parameter: *optimize_ddpm_parameter
+    sampling_rate: *sampling_rate
+    batchsize: 4
+    linear_start: 0.0015
+    linear_end: 0.0195
+    num_timesteps_cond: 1
+    log_every_t: 200
+    timesteps: 1000
+    unconditional_prob_cfg: 0.1
+    parameterization: eps # [eps, x0, v]
+    first_stage_key: fbank
+    latent_t_size: *latent_t_size # TODO might need to change
+    latent_f_size: *latent_f_size
+    channels: *latent_embed_dim # TODO might need to change
+    monitor: val/loss_simple_ema
+    scale_by_std: true
+    unet_config:
+      target: audioldm_train.modules.diffusionmodules.openaimodel.UNetModel
+      params:
+        image_size: 64 # Ignore this parameter
+        #extra_film_condition_dim: 512 # If you use film as extra condition, set this parameter. For example if you have two conditioning vectors each have dimension 512, then this number would be 1024
+        context_dim: 
+        - 768
+        - 1024
+        in_channels: *unet_in_channels # 8 The input channel of the UNet model
+        out_channels: *latent_embed_dim # 8 TODO might need to change
+        model_channels: 128 # TODO might need to change
+        attention_resolutions:
+        - 8
+        - 4
+        - 2
+        num_res_blocks: 2
+        channel_mult: 
+        - 1
+        - 2
+        - 3
+        - 5
+        num_head_channels: 32
+        use_spatial_transformer: true
+        transformer_depth: 1
+        #extra_sa_layer: False
+    #Hier wird die Konditionierungs-Stage definiert
+    cond_stage_config:
+      crossattn_audiomae_generated:
+        target: audioldm_train.conditional_models.SequenceGenAudioMAECond
+        cond_stage_key: all
+        conditioning_key: crossattn
+        params:
+          always_output_audiomae_gt: false
+          learnable: true
+          #device: mps
+          use_gt_mae_output: true
+          use_gt_mae_prob: 0.0
+          base_learning_rate: 1.0e-5 #weil finetuning
+          sequence_gen_length: 8
+          use_warmup: true
+          sequence_input_key: [film_clap_cond1,crossattn_flan_t5]
+          sequence_input_embed_dim: [512,1024]
+          batchsize: 4
+          cond_stage_config:
+            film_clap_cond1:
+              cond_stage_key: text
+              conditioning_key: film
+              target: audioldm_train.conditional_models.CLAPAudioEmbeddingClassifierFreev2
+              params: 
+                sampling_rate: 48000
+                embed_mode: text
+                amodel: HTSAT-base
+                pretrained_path: ""
+                #pretrained_path: data/checkpoints/clap_htsat_base.pt
+            crossattn_flan_t5:
+              cond_stage_key: text
+              conditioning_key: crossattn
+              target: audioldm_train.conditional_models.FlanT5HiddenState
+            crossattn_audiomae_pooled:
+              cond_stage_key: ta_kaldi_fbank
+              conditioning_key: crossattn
+              target: audioldm_train.conditional_models.AudioMAEConditionCTPoolRand
+              params:
+                regularization: false
+                no_audiomae_mask: true
+                time_pooling_factors: [8]
+                freq_pooling_factors: [8]
+                eval_time_pooling: 8
+                eval_freq_pooling: 8
+                mask_ratio: 0.0
+      crossattn_flan_t5:
+        cond_stage_key: text
+        conditioning_key: crossattn
+        target: audioldm_train.conditional_models.FlanT5HiddenState
+     
+
+
+    evaluation_params:
+      unconditional_guidance_scale: 3.5
+      ddim_sampling_steps: 200 # Diffusionsdurchläufe, eigentlich 200, aber for test auf 20 
+      n_candidates_per_samples: 3

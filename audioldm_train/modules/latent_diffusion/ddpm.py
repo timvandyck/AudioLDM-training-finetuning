@@ -115,10 +115,36 @@ class DDPM(pl.LightningModule):
             embed_mode="audio",
             amodel="HTSAT-base",
         )
+        #TEST IMPLEMENTATION - Evaluator instantiation from .yaml!
+        print(f"About To Set Evaluator, global_rank: {self.global_rank}")
+        if self.global_rank == 0:
+          if evaluator is not None:
+            if isinstance(evaluator,dict) and "target" in evaluator:
+              print("Instantiating Evaluator from config...")
+              try:              # Import hier damit es zur Runtime verfügbar ist
+                self.evaluator = instantiate_from_config(evaluator)
+                print(f"==> ✓ Evaluator instantiated: {type(self.evaluator)}")
+              except Exception as e:
+                print(f"==> ✗ Error instantiating evaluator: {e}")
+                self.evaluator = None
+            else:
+              # Bereits eine Instanz
+              self.evaluator = evaluator
+              print(f"==> ✓ Using provided evaluator instance: {type(evaluator)}")
+          else:
+            print("==> No evaluator parameter provided")
+            self.evaluator = None
+        else:
+          self.evaluator = None
+          print(f"==> Rank {self.global_rank}: No evaluator (only rank 0 gets evaluator)")
 
+        """
+        print(f"About To Set Evaluator, global_rank: {self.global_rank}")
         if self.global_rank == 0:
             self.evaluator = evaluator
-
+            print(f"Set Evaluator: {evaluator} \n\n\n")
+        """
+        
         self.initialize_param_check_toolkit()
 
         self.latent_t_size = latent_t_size
@@ -768,10 +794,25 @@ class DDPM(pl.LightningModule):
                         waveform_save_path,
                         self.test_data_subset_path,
                     )
+                    
 
                     self.metrics_buffer = {
                         ("val/" + k): float(v) for k, v in metrics.items()
                     }
+                    print(f"Evaluated metrics! Metrics buffer is : \n {self.metrics_buffer}\n\n")
+
+                    if len(self.metrics_buffer.keys()) > 0:
+                      for k in self.metrics_buffer.keys():
+                          self.log(
+                              k,
+                              self.metrics_buffer[k],
+                              prog_bar=False,
+                              logger=True,
+                              on_step=False,
+                              on_epoch=True,
+                          )
+                      # print(k, self.metrics_buffer[k])
+                      self.metrics_buffer = {}
                 else:
                     print(
                         "The target folder for evaluation does not exist: %s"
@@ -1750,8 +1791,8 @@ class LatentDiffusion(DDPM):
             x0=x0,
             **kwargs,
         )
-
-    def save_waveform(self, waveform, savepath, name="outwav"):
+    """OLD SAVE WAVEFORM"""
+    """def save_waveform(self, waveform, savepath, name="outwav"):
         for i in range(waveform.shape[0]):
             if type(name) is str:
                 path = os.path.join(
@@ -1767,6 +1808,38 @@ class LatentDiffusion(DDPM):
                         else os.path.basename(name[i]).split(".")[0]
                     ),
                 )
+            else:
+                raise NotImplementedError
+            todo_waveform = waveform[i, 0]
+            todo_waveform = (
+                todo_waveform / np.max(np.abs(todo_waveform))
+            ) * 0.8  # Normalize the energy of the generation output
+            sf.write(path, todo_waveform, samplerate=self.sampling_rate)"""
+    """NEW MORE ROBUST SAVE WAVEFORM"""
+    def save_waveform(self, waveform, savepath, name="outwav"):
+        for i in range(waveform.shape[0]):
+            if type(name) is str:
+                path = os.path.join(
+                    savepath, "%s_%s_%s.wav" % (self.global_step, i, name)
+                )
+            elif type(name) is list:
+                # FIX: Preserve full filename to match ground-truth files in evaluation
+                # Original bug: .split(".")[0] removed everything after first dot
+                # This caused "ADDOA010.WAV_0019_23_padded.wav" -> "ADDOA010.wav"
+                # But ground-truth files keep the full name: "ADDOA010.WAV_0019_23_padded.wav"
+                # Result: audioldm_eval couldn't match generated vs ground-truth files
+                
+                filename = os.path.basename(name[i])
+                if filename.lower().endswith(".wav"):
+                    # Only remove the .wav extension, keep everything else
+                    clean_name = filename[:-4]  # Remove last 4 chars (".wav")
+                else:
+                    clean_name = filename
+                
+                path = os.path.join(savepath, "%s.wav" % clean_name)
+                
+                # DEBUG: Print filename transformation to verify fix
+                # print(f"Original: {name[i]} -> Saved as: {clean_name}.wav")
             else:
                 raise NotImplementedError
             todo_waveform = waveform[i, 0]

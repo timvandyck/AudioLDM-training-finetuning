@@ -1,0 +1,14 @@
+{
+    "elephant_dataset": "./data/elephant_data/audio_set",
+    "comments": {},
+    "metadata": {
+        "path": {
+            "elephant_dataset": {
+                "train": "./data/elephant_data/metadata/train.json",
+                "test": "./data/elephant_data/metadata/test.json",
+                "val": "./data/elephant_data/metadata/test.json",
+                "class_label_indices": "./data/metadata/elephant_data/class_label_indices.csv"
+            }
+        }
+    }
+}

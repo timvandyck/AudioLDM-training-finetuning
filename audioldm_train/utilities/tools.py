@@ -94,7 +94,9 @@ def copy_test_subset_data(metadata, testset_copy_target_path):
 
     print("Copying test subset data to {}".format(testset_copy_target_path))
     for each in tqdm(metadata):
-        cmd = "cp {} {}".format(each["wav"], os.path.join(testset_copy_target_path))
+        #Make it work for wav files which have () in the name
+
+        cmd = "cp '{}' '{}'".format(each["wav"], os.path.join(testset_copy_target_path))
         os.system(cmd)
 
 

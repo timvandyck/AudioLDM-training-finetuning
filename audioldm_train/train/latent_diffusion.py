@@ -99,24 +99,44 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
         limit_val_batches = None
 
     validation_every_n_epochs = configs["step"]["validation_every_n_epochs"]
-    save_checkpoint_every_n_steps = configs["step"]["save_checkpoint_every_n_steps"]
+    save_checkpoint_every_n_steps = configs["step"].get("save_checkpoint_every_n_steps",None)
+    save_checkpoint_every_n_epochs = configs["step"].get("save_checkpoint_every_n_epochs",None)#added this to add functionality for checkpoint saving after N epochs 
     max_steps = configs["step"]["max_steps"]
     save_top_k = configs["step"]["save_top_k"]
 
     checkpoint_path = os.path.join(log_path, exp_group_name, exp_name, "checkpoints")
 
     wandb_path = os.path.join(log_path, exp_group_name, exp_name)
-
-    checkpoint_callback = ModelCheckpoint(
+    # ModelCheckpoint mit konditionaler Logik
+    checkpoint_kwargs = {
+        "dirpath": checkpoint_path,
+        "monitor": "val/frechet_audio_distance",  # Hardcoded FAD
+        "mode": "min",
+        "filename": "checkpoint-fad-{val/frechet_audio_distance:.2f}-epoch={epoch:02d}-step={global_step:.0f}",  # ← EPOCH HINZUGEFÜGT
+        "save_top_k": save_top_k,
+        "auto_insert_metric_name": False,
+        "save_last": True,
+    }
+    
+    # Entscheide zwischen Steps oder Epochs
+    if save_checkpoint_every_n_epochs is not None:
+        # Epochen-basiert
+        checkpoint_kwargs["every_n_epochs"] = save_checkpoint_every_n_epochs
+    else:
+        # Steps-basiert (Original)
+        checkpoint_kwargs["every_n_train_steps"] = save_checkpoint_every_n_steps
+    
+    checkpoint_callback = ModelCheckpoint(**checkpoint_kwargs)
+    """checkpoint_callback = ModelCheckpoint(
         dirpath=checkpoint_path,
         monitor="global_step",
         mode="max",
-        filename="checkpoint-fad-{val/frechet_inception_distance:.2f}-global_step={global_step:.0f}",
+        filename="checkpoint-fad-{val/frechet_audio_distance:.2f}-global_step={global_step:.0f}",
         every_n_train_steps=save_checkpoint_every_n_steps,
         save_top_k=save_top_k,
         auto_insert_metric_name=False,
         save_last=False,
-    )
+    )"""
 
     os.makedirs(checkpoint_path, exist_ok=True)
     shutil.copy(config_yaml_path, wandb_path)
@@ -163,7 +183,7 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
         strategy=DDPStrategy(find_unused_parameters=True),
         callbacks=[checkpoint_callback],
     )
-
+    print("Initialized Trainer")
     if is_external_checkpoints:
         if resume_from_checkpoint is not None:
             ckpt = torch.load(resume_from_checkpoint)["state_dict"]
@@ -186,11 +206,11 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
                     del ckpt[key]
                     size_mismatch_keys.append(key)
 
-            # if(len(key_not_in_model_state_dict) != 0 or len(size_mismatch_keys) != 0):
-            # print("⛳", end=" ")
+            if(len(key_not_in_model_state_dict) != 0 or len(size_mismatch_keys) != 0):
+             print("⛳", end=" ")
 
-            # print("==> Warning: The following key in the checkpoint is not presented in the model:", key_not_in_model_state_dict)
-            # print("==> Warning: These keys have different size between checkpoint and current model: ", size_mismatch_keys)
+             print("==> Warning: The following key in the checkpoint is not presented in the model:", key_not_in_model_state_dict)
+             print("==> Warning: These keys have different size between checkpoint and current model: ", size_mismatch_keys)
 
             latent_diffusion.load_state_dict(ckpt, strict=False)
 
@@ -199,6 +219,7 @@ def main(configs, config_yaml_path, exp_group_name, exp_name, perform_validation
 
         trainer.fit(latent_diffusion, loader, val_loader)
     else:
+        print("No Checkpoint specified")
         trainer.fit(
             latent_diffusion, loader, val_loader, ckpt_path=resume_from_checkpoint
         )
